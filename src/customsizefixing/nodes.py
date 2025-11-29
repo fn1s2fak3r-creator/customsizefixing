@@ -19,9 +19,16 @@ class SizeFixer:
     RETURN_NAMES = ("width", "height",)
     FUNCTION = "calc_size"
 
+    @staticmethod
+    def round_to_multiple(value, base):
+        return int(round(value / base) * base)
+
+
     def calc_size(self, width, height, max_length):
-        new_width = max_length if width >= height else max_length / (height / width)
-        new_height = max_length if height >= width else max_length / (width / height)
+        new_width_candidate = max_length if width >= height else max_length / (height / width)
+        new_height_candidate = max_length if height >= width else max_length / (width / height)
+        new_width = SizeFixer.round_to_multiple(new_width_candidate, 16)
+        new_height = SizeFixer.round_to_multiple(new_height_candidate, 16)
         return (int(new_width), int(new_height),)
         
 
